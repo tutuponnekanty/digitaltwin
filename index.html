@@ -883,6 +883,139 @@
     }
 
     
+    
+    /* Executive Brief: Core Purpose, Real-World Impact & Value */
+    .executive-overview-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 28px;
+      position: relative;
+    }
+
+    .exec-header {
+      margin-bottom: 18px;
+    }
+
+    .exec-eyebrow {
+      font-size: 11px;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #93c5fd;
+      background: rgba(59, 130, 246, 0.08);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      padding: 3px 9px;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .exec-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-1);
+      letter-spacing: -0.015em;
+      margin: 0;
+    }
+
+    .exec-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .exec-col {
+      background: rgba(14, 17, 26, 0.7);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px 14px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .exec-col-tag {
+      font-size: 10px;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 2px 7px;
+      border-radius: var(--radius-sm);
+      display: inline-block;
+      width: fit-content;
+      margin-bottom: 10px;
+    }
+
+    .challenge-tag {
+      color: #f87171;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+    }
+
+    .solution-tag {
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+    }
+
+    .outcome-tag {
+      color: #34d399;
+      background: rgba(52, 211, 153, 0.1);
+      border: 1px solid rgba(52, 211, 153, 0.25);
+    }
+
+    .benefit-tag {
+      color: #c084fc;
+      background: rgba(192, 132, 252, 0.1);
+      border: 1px solid rgba(192, 132, 252, 0.25);
+    }
+
+    .exec-col h4 {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-1);
+      margin-bottom: 8px;
+      line-height: 1.35;
+    }
+
+    .exec-col p {
+      font-size: 12.5px;
+      color: var(--text-2);
+      line-height: 1.55;
+      margin: 0;
+      flex-grow: 1;
+    }
+
+    .exec-beneficiary-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .exec-beneficiary-item {
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--text-2);
+      border-left: 2px solid rgba(192, 132, 252, 0.4);
+      padding-left: 8px;
+    }
+
+    .exec-beneficiary-item strong {
+      color: var(--text-1);
+      display: block;
+      font-size: 11.5px;
+      margin-bottom: 1px;
+    }
+
+
     /* ==========================================================================
        MOBILE PORTRAIT & LANDSCAPE RESPONSIVE SYSTEM
        ========================================================================== */
@@ -921,6 +1054,7 @@
 
     /* Tablet & Medium Screens (< 960px) */
     @media (max-width: 960px) {
+      .exec-grid { grid-template-columns: repeat(2, 1fr) !important; }
       .tiles-grid { grid-template-columns: repeat(2, 1fr); }
       .timeline-cols { grid-template-columns: repeat(2, 1fr); }
       .content-grid { grid-template-columns: 1fr; }
@@ -931,6 +1065,8 @@
 
     /* Mobile Portrait (< 768px) */
     @media (max-width: 768px) {
+      .exec-grid { grid-template-columns: 1fr !important; gap: 10px; }
+      .executive-overview-card { padding: 16px 14px; margin-bottom: 20px; }
       /* Top Nav */
       .top-nav {
         padding: 10px 16px;
@@ -1529,6 +1665,7 @@
     const projectsData = {
       1: {
         id: 1,
+        executiveBrief: {"problem": "Cancer therapies often work well at first, but tumors naturally evolve resistance. Right now, doctors only discover that a drug has failed weeks or months later when a tumor visibly regrows on a CT scan\u2014often too late to pivot cleanly.", "howItSolves": "Uses routine blood draws (liquid biopsies) tracking circulating tumor DNA fragments. A mathematical twin simulates sensitive vs. resistant tumor sub-clones in real time, alerting doctors weeks before a tumor grows large enough to be seen on a scan.", "outcome": "Doctors can pause, adjust, or change drugs before the tumor rebounds. This extends remission times and stops patients from continuing toxic treatments that are no longer working.", "beneficiaries": [{"role": "Patients", "impact": "Longer progression-free survival and spared toxic side effects from failing therapies."}, {"role": "Oncologists", "impact": "Proactive forward visibility to adjust treatment schedules with mathematical confidence."}, {"role": "Health Systems", "impact": "Fewer emergency complications and earlier surrogate decision endpoints in trials."}]},
         name: "EvoTwin",
         subtitle: "Decision-Focused Tumor Resistance Evolution Twin",
         domain: "Oncology",
@@ -1559,6 +1696,7 @@
       },
       2: {
         id: 2,
+        executiveBrief: {"problem": "Targeted radiation drugs (radiopharmaceuticals) hunt and destroy cancer cells from within. Because every patient absorbs radiation differently, standard treatments give everyone the same dose. Personalizing it currently requires staying in the hospital for multiple grueling scans over 3 to 5 days, which 90% of clinics cannot accommodate.", "howItSolves": "Takes just a single routine scan after the first infusion. A physics-based AI twin models whole-body blood flow, organ clearance, and tumor receptors, calculating the exact radiation dose delivered to the tumor and vital organs.", "outcome": "Doctors can safely maximize radiation to destroy tumors aggressively while having absolute certainty that healthy kidneys and bone marrow remain completely protected.", "beneficiaries": [{"role": "Patients", "impact": "Maximum cancer-killing dose tailored to their physiology without risk of radiation kidney failure."}, {"role": "Clinicians", "impact": "Safe, personalized dose calculation delivered in minutes from one standard clinic scan."}, {"role": "Hospitals", "impact": "Saves 3 to 4 days of repeat scanner visits per cycle, ending scanner backlogs and hospital bed delays."}]},
         name: "ThetaTwin",
         subtitle: "Amortized Theranostic Dosimetry Twin",
         domain: "Oncology (Radioligand Therapy)",
@@ -1589,6 +1727,7 @@
       },
       3: {
         id: 3,
+        executiveBrief: {"problem": "Dangerous irregular heart rhythms (ventricular tachycardia) can trigger sudden cardiac arrest. To treat it, doctors thread a catheter into the beating heart and burn ('ablate') scar tissue. It is a grueling, high-risk 4-to-6-hour procedure where doctors must blindly hunt for the electrical short-circuit.", "howItSolves": "Builds a virtual 3D replica of the patient's beating heart from standard non-invasive MRI/CT scans. Before surgery, an AI engine runs thousands of virtual electrical stress simulations to pinpoint the exact tissue causing the short circuit.", "outcome": "The electrophysiologist receives an exact surgical ablation roadmap before ever picking up a catheter. Procedure times are cut in half, and arrhythmia recurrences are drastically reduced.", "beneficiaries": [{"role": "Patients", "impact": "Much lower risk of sudden cardiac arrest, fewer emergency defibrillator shocks, and half the anesthesia time."}, {"role": "Electrophysiologists", "impact": "Replaces stressful live catheter searching with a validated pre-surgical roadmap."}, {"role": "Surgical Centers", "impact": "Doubled catheterization lab throughput and reduced emergency post-op readmissions."}]},
         name: "ScarLess",
         subtitle: "MRI-Free Arrhythmia & Remodeling Twin",
         domain: "Cardiology",
@@ -1619,6 +1758,7 @@
       },
       4: {
         id: 4,
+        executiveBrief: {"problem": "Autoimmune conditions like lupus and rheumatoid arthritis cause sudden, unpredictable flare-ups where the immune system attacks joints and vital organs. Doctors either keep patients on dangerous lifelong high-dose steroids or react only after irreversible joint or kidney damage has already occurred.", "howItSolves": "Continuously tracks routine immune blood markers to detect subtle early-warning patterns (immune tipping points) that emerge 3 to 6 weeks before physical flare symptoms appear.", "outcome": "Enables proactive, low-dose preventive treatment at the first sign of an impending flare, shutting down the immune attack before it damages organs and allowing patients to safely taper off chronic steroid medications.", "beneficiaries": [{"role": "Patients", "impact": "Preserved kidney and joint function, freedom from unpredictable flares, and reduced steroid toxicity."}, {"role": "Rheumatologists", "impact": "Shift from reactive crisis management to proactive, preventative immune stabilization."}, {"role": "Payers & Systems", "impact": "Massive healthcare savings from avoided emergency visits and long-term dialysis."}]},
         name: "ImmunoSwitch",
         subtitle: "Immune State-Space Twin with Flare Early Warning",
         domain: "Immunology (Autoimmune)",
@@ -1649,6 +1789,7 @@
       },
       5: {
         id: 5,
+        executiveBrief: {"problem": "One in three people with epilepsy cannot control their seizures with medication. Surgery to remove the seizure trigger zone is the only cure. However, pinpointing that spot currently requires drilling 10 to 18 holes into the skull to insert depth electrodes into the brain, followed by a 2-week hospital stay.", "howItSolves": "Creates a virtual simulation of the patient's individual brain wiring using non-invasive MRI and scalp EEGs. It models how abnormal electrical waves propagate across brain networks to locate the seizure trigger zone digitally.", "outcome": "Surgeons can reduce the number of drilled brain electrodes by 40% to 50% (or avoid drilling altogether in select cases), while boosting the surgical seizure-free rate from ~50% to over 70%.", "beneficiaries": [{"role": "Patients & Families", "impact": "Fewer invasive brain penetrations, shorter hospital stays, less surgical risk, and a higher chance of living seizure-free."}, {"role": "Neurosurgeons", "impact": "Clear, quantitative spatial targeting for surgical resection with documented confidence bounds."}, {"role": "Hospitals", "impact": "Shortens high-cost neuro-ICU monitoring stays and reduces surgical complications."}]},
         name: "PreSEEG",
         subtitle: "Non-Invasive Epilepsy Surgery Twin",
         domain: "Neurology & Neurosurgery",
@@ -1679,6 +1820,7 @@
       },
       6: {
         id: 6,
+        executiveBrief: {"problem": "Over 70% of cancer patients undergo comprehensive genetic DNA sequencing only to hear: 'There are no targeted drugs approved for your specific mutation.' These patients are left with generic, trial-and-error chemotherapy.", "howItSolves": "Takes living cells from a routine biopsy and tests them directly against dozens of potential medications, while an AI twin models cellular pathway responses to identify unexpected drug combinations that work for that specific individual.", "outcome": "Delivers a lab-validated, personalized drug recommendation within 7 to 10 days, transforming a dead-end genetic report into an actionable treatment strategy.", "beneficiaries": [{"role": "Patients", "impact": "Concrete, personalized treatment choices when standard genomic guidelines offer no approved options."}, {"role": "Oncologists", "impact": "Empirical laboratory proof to prescribe effective off-label or novel drug combinations with confidence."}, {"role": "Biotech & Pharma", "impact": "Accelerates discovery of novel drug combinations in real patient tumor models."}]},
         name: "FunctionalTwin",
         subtitle: "Patient-to-Virtual-Cell Bridge",
         domain: "Cross-Disease Platform (Oncology)",
@@ -1825,6 +1967,47 @@
       const nextId = p.id === 6 ? 1 : p.id + 1;
       const nextProject = projectsData[nextId];
 
+      // Executive Brief Beneficiaries HTML
+      const bList = (p.executiveBrief && p.executiveBrief.beneficiaries ? p.executiveBrief.beneficiaries : []).map(b => `
+        <li class="exec-beneficiary-item">
+          <strong>${b.role}</strong>
+          ${b.impact}
+        </li>
+      `).join('');
+
+      const execBriefHTML = p.executiveBrief ? `
+        <div class="executive-overview-card">
+          <div class="exec-header">
+            <div class="exec-eyebrow">Executive Brief &middot; Real-World Value</div>
+            <h3 class="exec-title">Core Purpose, Real-World Impact &amp; Beneficiaries</h3>
+          </div>
+          <div class="exec-grid">
+            <div class="exec-col">
+              <span class="exec-col-tag challenge-tag">The Challenge</span>
+              <h4>What Problem Is It Solving?</h4>
+              <p>${p.executiveBrief.problem}</p>
+            </div>
+            <div class="exec-col">
+              <span class="exec-col-tag solution-tag">The Approach</span>
+              <h4>How Does It Work?</h4>
+              <p>${p.executiveBrief.howItSolves}</p>
+            </div>
+            <div class="exec-col">
+              <span class="exec-col-tag outcome-tag">Expected Outcome</span>
+              <h4>What Is The Concrete Result?</h4>
+              <p>${p.executiveBrief.outcome}</p>
+            </div>
+            <div class="exec-col">
+              <span class="exec-col-tag benefit-tag">Who Benefits</span>
+              <h4>Real-World Value Delivery</h4>
+              <ul class="exec-beneficiary-list">
+                ${bList}
+              </ul>
+            </div>
+          </div>
+        </div>
+      ` : '';
+
       container.innerHTML = `
         <div class="project-hero">
           <div class="project-meta-row">
@@ -1835,6 +2018,8 @@
           <h2 class="project-heading">${p.name}: <span style="font-weight: 500; color: var(--text-2);">${p.subtitle}</span></h2>
           <p class="project-summary">${p.thesis}</p>
         </div>
+
+        ${execBriefHTML}
 
         <!-- Interactive Visualizer Card -->
         <div class="visualizer-card">
