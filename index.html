@@ -997,22 +997,47 @@
       margin: 0;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
     }
 
     .exec-beneficiary-item {
-      font-size: 12px;
+      font-size: 12.5px;
       line-height: 1.45;
       color: var(--text-2);
-      border-left: 2px solid rgba(192, 132, 252, 0.4);
-      padding-left: 8px;
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(192, 132, 252, 0.22);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      transition: all var(--transition-fast);
+      position: relative;
+    }
+
+    .exec-beneficiary-item:hover {
+      background: rgba(192, 132, 252, 0.08);
+      border-color: rgba(192, 132, 252, 0.4);
+      transform: translateY(-1px);
     }
 
     .exec-beneficiary-item strong {
-      color: var(--text-1);
-      display: block;
-      font-size: 11.5px;
-      margin-bottom: 1px;
+      color: #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      letter-spacing: -0.01em;
+    }
+
+    .exec-beneficiary-item strong::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #c084fc;
+      box-shadow: 0 0 6px rgba(192, 132, 252, 0.6);
+      flex-shrink: 0;
     }
 
 
@@ -2148,13 +2173,25 @@
       // Toggle workbench slider visibility
       document.getElementById('slider-workbench-slot').style.display = type === 'sim' ? 'grid' : 'none';
 
+      adjustCanvasContainerHeight();
       redrawCurrent();
+    }
+
+    function adjustCanvasContainerHeight() {
+      const container = document.querySelector('.canvas-container');
+      if (!container) return;
+      if (vizViewType === 'pipe' && window.innerWidth < 640) {
+        container.style.height = '440px';
+      } else {
+        container.style.height = '';
+      }
     }
 
     function initCanvas(id) {
       currentProjectId = id;
       canvasMode = 'default';
       vizViewType = 'sim';
+      adjustCanvasContainerHeight();
 
       const ctrls = document.getElementById('v-controls-slot');
       const footnote = document.getElementById('v-footnote-slot');
@@ -2568,6 +2605,7 @@
     // VISUALIZER MODE 2: AI ARCHITECTURE PIPELINE FLOWCHART
     // =========================================================================
     function drawArchitecturePipeline(id) {
+      adjustCanvasContainerHeight();
       const p = getContext();
       if (!p) return;
       const { ctx, w, h } = p;
@@ -2626,60 +2664,155 @@
       }
 
       const count = steps.length;
-      const boxW = Math.min(170, (w - 80) / count - 16);
-      const boxH = 110;
-      const startX = 40;
+      const isMobile = w < 640;
+
+      if (isMobile) {
+        // Vertical stacked layout for mobile
+        const paddingX = 12;
+        const boxW = w - (paddingX * 2);
+        const boxH = 64;
+        const gapY = 16;
+        const startY = 12;
+
+        // Draw connecting vertical lines and down arrows
+        for (let i = 0; i < count - 1; i++) {
+          const y1 = startY + i * (boxH + gapY) + boxH;
+          const y2 = y1 + gapY;
+          const centerX = w / 2;
+
+          ctx.strokeStyle = 'rgba(59, 130, 246, 0.4)';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(centerX, y1);
+          ctx.lineTo(centerX, y2);
+          ctx.stroke();
+
+          // Arrow head pointing down
+          ctx.fillStyle = '#3b82f6';
+          ctx.beginPath();
+          ctx.moveTo(centerX, y2);
+          ctx.lineTo(centerX - 5, y2 - 6);
+          ctx.lineTo(centerX + 5, y2 - 6);
+          ctx.fill();
+        }
+
+        // Draw step cards
+        steps.forEach((s, idx) => {
+          const x = paddingX;
+          const y = startY + idx * (boxH + gapY);
+          const isHighlight = idx === 3;
+
+          // Background card surface
+          ctx.fillStyle = isHighlight ? 'rgba(59, 130, 246, 0.14)' : 'rgba(18, 21, 30, 0.95)';
+          ctx.beginPath();
+          if (ctx.roundRect) {
+            ctx.roundRect(x, y, boxW, boxH, 8);
+          } else {
+            ctx.rect(x, y, boxW, boxH);
+          }
+          ctx.fill();
+
+          ctx.strokeStyle = isHighlight ? '#3b82f6' : 'rgba(255, 255, 255, 0.12)';
+          ctx.lineWidth = isHighlight ? 1.5 : 1;
+          ctx.stroke();
+
+          // Step tag (top right)
+          ctx.fillStyle = isHighlight ? '#93c5fd' : '#64748b';
+          ctx.font = '600 10px "JetBrains Mono", monospace';
+          ctx.fillText(`0${idx + 1} // ${s.tag}`, x + 12, y + 20);
+
+          // Name
+          ctx.fillStyle = '#f8fafc';
+          ctx.font = '700 13px "Plus Jakarta Sans", sans-serif';
+          ctx.fillText(s.name, x + 12, y + 38);
+
+          // Subtitle
+          ctx.fillStyle = '#94a3b8';
+          ctx.font = '500 11px "Plus Jakarta Sans", sans-serif';
+          ctx.fillText(s.sub, x + 12, y + 53);
+        });
+        return;
+      }
+
+      // Horizontal flow for desktop
+      const startX = 20;
+      const usableW = w - 40;
+      const gapX = 14;
+      const boxW = (usableW - (gapX * (count - 1))) / count;
+      const boxH = 114;
       const centerY = h / 2;
+      const startY = centerY - boxH / 2;
 
       // Draw Connection Arrows
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-      ctx.lineWidth = 2;
       for (let i = 0; i < count - 1; i++) {
-        const x1 = startX + i * (boxW + 20) + boxW;
-        const x2 = startX + (i + 1) * (boxW + 20);
+        const x1 = startX + i * (boxW + gapX) + boxW;
+        const x2 = x1 + gapX;
+
+        ctx.strokeStyle = 'rgba(59, 130, 246, 0.4)';
+        ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(x1, centerY);
         ctx.lineTo(x2, centerY);
         ctx.stroke();
 
-        // Arrow head
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+        // Arrow head right
+        ctx.fillStyle = '#3b82f6';
         ctx.beginPath();
         ctx.moveTo(x2, centerY);
-        ctx.lineTo(x2 - 6, centerY - 4);
-        ctx.lineTo(x2 - 6, centerY + 4);
+        ctx.lineTo(x2 - 5, centerY - 4);
+        ctx.lineTo(x2 - 5, centerY + 4);
         ctx.fill();
       }
 
       // Draw Step Cards
       steps.forEach((s, idx) => {
-        const x = startX + idx * (boxW + 20);
-        const y = centerY - boxH / 2;
+        const x = startX + idx * (boxW + gapX);
+        const y = startY;
+        const isHighlight = idx === 3;
 
         // Card surface
-        ctx.fillStyle = idx === 3 ? 'rgba(59, 130, 246, 0.12)' : 'rgba(255, 255, 255, 0.03)';
-        ctx.fillRect(x, y, boxW, boxH);
-        ctx.strokeStyle = idx === 3 ? '#3b82f6' : 'rgba(255, 255, 255, 0.1)';
-        ctx.strokeRect(x, y, boxW, boxH);
+        ctx.fillStyle = isHighlight ? 'rgba(59, 130, 246, 0.14)' : 'rgba(18, 21, 30, 0.95)';
+        ctx.beginPath();
+        if (ctx.roundRect) {
+          ctx.roundRect(x, y, boxW, boxH, 8);
+        } else {
+          ctx.rect(x, y, boxW, boxH);
+        }
+        ctx.fill();
 
-        // Step index tag
-        ctx.fillStyle = '#64748b';
-        ctx.font = '9px JetBrains Mono';
-        ctx.fillText(`0${idx + 1} // ${s.tag}`, x + 10, y + 20);
+        ctx.strokeStyle = isHighlight ? '#3b82f6' : 'rgba(255, 255, 255, 0.12)';
+        ctx.lineWidth = isHighlight ? 1.5 : 1;
+        ctx.stroke();
+
+        // Tag
+        ctx.fillStyle = isHighlight ? '#93c5fd' : '#64748b';
+        ctx.font = '600 10px "JetBrains Mono", monospace';
+        ctx.fillText(`0${idx + 1} // ${s.tag}`, x + 10, y + 22);
 
         // Name
         ctx.fillStyle = '#f8fafc';
-        ctx.font = '12px Plus Jakarta Sans';
+        ctx.font = '700 13px "Plus Jakarta Sans", sans-serif';
         ctx.fillText(s.name, x + 10, y + 46);
 
-        // Subtitle
+        // Subtitle (wrapped text)
         ctx.fillStyle = '#94a3b8';
-        ctx.font = '10px Plus Jakarta Sans';
-        // Wrap text if needed
-        ctx.fillText(s.sub.slice(0, 22), x + 10, y + 70);
-        if (s.sub.length > 22) {
-          ctx.fillText(s.sub.slice(22), x + 10, y + 84);
+        ctx.font = '500 11px "Plus Jakarta Sans", sans-serif';
+
+        const words = s.sub.split(' ');
+        let line = '';
+        let lineY = y + 66;
+        for (let n = 0; n < words.length; n++) {
+          let testLine = line + words[n] + ' ';
+          let metrics = ctx.measureText(testLine);
+          if (metrics.width > boxW - 16 && n > 0) {
+            ctx.fillText(line.trim(), x + 10, lineY);
+            line = words[n] + ' ';
+            lineY += 15;
+          } else {
+            line = testLine;
+          }
         }
+        ctx.fillText(line.trim(), x + 10, lineY);
       });
     }
 
